@@ -1,0 +1,37 @@
+import java.awt.BorderLayout;
+import java.io.File;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+import javax.media.Manager;
+import javax.media.Player;
+
+public class VideoPlayer {
+
+    public static void main(String[] args) {
+
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("My Video Player");
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            JPanel contentPane = new JPanel(new BorderLayout());
+            frame.setContentPane(contentPane);
+
+            String videoPath = "path/to/video.mp4";
+            File videoFile = new File(videoPath);
+
+            try {
+                Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, true);
+                Player mediaPlayer = Manager.createRealizedPlayer(videoFile.toURI().toURL());
+                contentPane.add(mediaPlayer.getVisualComponent(), BorderLayout.CENTER);
+                contentPane.add(mediaPlayer.getControlPanelComponent(), BorderLayout.SOUTH);
+                frame.setSize(640, 480);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                mediaPlayer.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}
